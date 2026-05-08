@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VariantsRouteImport } from './routes/variants'
 import { Route as SimulationsRouteImport } from './routes/simulations'
+import { Route as SimulationResultsRouteImport } from './routes/simulation-results'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
@@ -28,6 +29,11 @@ const VariantsRoute = VariantsRouteImport.update({
 const SimulationsRoute = SimulationsRouteImport.update({
   id: '/simulations',
   path: '/simulations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulationResultsRoute = SimulationResultsRouteImport.update({
+  id: '/simulation-results',
+  path: '/simulation-results',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/simulation-results': typeof SimulationResultsRoute
   '/simulations': typeof SimulationsRoute
   '/variants': typeof VariantsRoute
 }
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/simulation-results': typeof SimulationResultsRoute
   '/simulations': typeof SimulationsRoute
   '/variants': typeof VariantsRoute
 }
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/simulation-results': typeof SimulationResultsRoute
   '/simulations': typeof SimulationsRoute
   '/variants': typeof VariantsRoute
 }
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/register'
+    | '/simulation-results'
     | '/simulations'
     | '/variants'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/register'
+    | '/simulation-results'
     | '/simulations'
     | '/variants'
   id:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/login'
     | '/register'
+    | '/simulation-results'
     | '/simulations'
     | '/variants'
   fileRoutesById: FileRoutesById
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  SimulationResultsRoute: typeof SimulationResultsRoute
   SimulationsRoute: typeof SimulationsRoute
   VariantsRoute: typeof VariantsRoute
 }
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/simulations'
       fullPath: '/simulations'
       preLoaderRoute: typeof SimulationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulation-results': {
+      id: '/simulation-results'
+      path: '/simulation-results'
+      fullPath: '/simulation-results'
+      preLoaderRoute: typeof SimulationResultsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  SimulationResultsRoute: SimulationResultsRoute,
   SimulationsRoute: SimulationsRoute,
   VariantsRoute: VariantsRoute,
 }
