@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Users, Box, Bell, User } from "lucide-react";
+import { Home, Users, Box, Bell, User, Plus } from "lucide-react";
 import type { ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function MobileShell({ children, hideNav = false }: { children: ReactNode; hideNav?: boolean }) {
   return (
@@ -9,9 +10,49 @@ export function MobileShell({ children, hideNav = false }: { children: ReactNode
       <div className="pointer-events-none absolute -top-32 -left-20 h-72 w-72 rounded-full bg-[oklch(0.6_0.25_300/0.35)] blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 -right-20 h-80 w-80 rounded-full bg-[oklch(0.65_0.22_240/0.3)] blur-3xl" />
       <div className="pointer-events-none absolute top-1/3 right-1/4 h-40 w-40 rounded-full bg-[oklch(0.85_0.18_195/0.2)] blur-3xl" />
-      <div className={`relative z-10 ${hideNav ? "pb-6" : "pb-28"} pt-6 px-5`}>{children}</div>
+      <div className={`relative z-10 ${hideNav ? "pb-6" : "pb-28"} pt-6 px-5 animate-fade-in`}>{children}</div>
       {!hideNav && <BottomNav />}
     </div>
+  );
+}
+
+export function FAB({ icon: Icon = Plus, label, onClick, to }: { icon?: any; label?: string; onClick?: () => void; to?: string }) {
+  const cls = "fixed bottom-24 right-5 z-40 flex h-14 items-center gap-2 rounded-full bg-gradient-primary px-5 glow-primary animate-pulse-glow active:scale-95 transition-transform";
+  const content = (
+    <>
+      <Icon className="h-5 w-5 text-white" />
+      {label && <span className="text-xs font-semibold text-white">{label}</span>}
+    </>
+  );
+  return to ? (
+    <Link to={to} className={cls}>{content}</Link>
+  ) : (
+    <button onClick={onClick} className={cls}>{content}</button>
+  );
+}
+
+export function BottomSheet({ open, onClose, title, children, peek = 120 }: { open: boolean; onClose: () => void; title?: string; children: ReactNode; peek?: number }) {
+  const [drag, setDrag] = useState(0);
+  const startY = useRef<number | null>(null);
+  useEffect(() => { if (!open) setDrag(0); }, [open]);
+  return (
+    <>
+      {open && <div onClick={onClose} className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm animate-fade-in" />}
+      <div
+        className="fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 transition-transform duration-300 ease-out"
+        style={{ transform: open ? `translate(-50%, ${Math.max(0, drag)}px)` : `translate(-50%, calc(100% - ${peek}px))` }}
+      >
+        <div className="glass-strong rounded-t-3xl px-5 pt-3 pb-8 max-h-[85vh] overflow-y-auto"
+          onTouchStart={(e) => (startY.current = e.touches[0].clientY)}
+          onTouchMove={(e) => startY.current != null && setDrag(e.touches[0].clientY - startY.current)}
+          onTouchEnd={() => { if (drag > 80) onClose(); setDrag(0); startY.current = null; }}
+        >
+          <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-white/30" />
+          {title && <h3 className="mb-3 text-sm font-semibold text-gradient">{title}</h3>}
+          {children}
+        </div>
+      </div>
+    </>
   );
 }
 
