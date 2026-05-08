@@ -9,8 +9,92 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VariantsRouteImport } from './routes/variants'
+import { Route as SimulationsRouteImport } from './routes/simulations'
+import { Route as SimulationResultsRouteImport } from './routes/simulation-results'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as ExportRouteImport } from './routes/export'
+import { Route as CollabRouteImport } from './routes/collab'
+import { Route as ArRouteImport } from './routes/ar'
+import { Route as AnnotationRouteImport } from './routes/annotation'
+import { Route as AiEngineRouteImport } from './routes/ai-engine'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VariantsRoute = VariantsRouteImport.update({
+  id: '/variants',
+  path: '/variants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulationsRoute = SimulationsRouteImport.update({
+  id: '/simulations',
+  path: '/simulations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulationResultsRoute = SimulationResultsRouteImport.update({
+  id: '/simulation-results',
+  path: '/simulation-results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExportRoute = ExportRouteImport.update({
+  id: '/export',
+  path: '/export',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollabRoute = CollabRouteImport.update({
+  id: '/collab',
+  path: '/collab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArRoute = ArRouteImport.update({
+  id: '/ar',
+  path: '/ar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnnotationRoute = AnnotationRouteImport.update({
+  id: '/annotation',
+  path: '/annotation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiEngineRoute = AiEngineRouteImport.update({
+  id: '/ai-engine',
+  path: '/ai-engine',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +103,228 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-engine': typeof AiEngineRoute
+  '/annotation': typeof AnnotationRoute
+  '/ar': typeof ArRoute
+  '/collab': typeof CollabRoute
+  '/export': typeof ExportRoute
+  '/home': typeof HomeRoute
+  '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
+  '/projects': typeof ProjectsRoute
+  '/register': typeof RegisterRoute
+  '/simulation-results': typeof SimulationResultsRoute
+  '/simulations': typeof SimulationsRoute
+  '/variants': typeof VariantsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-engine': typeof AiEngineRoute
+  '/annotation': typeof AnnotationRoute
+  '/ar': typeof ArRoute
+  '/collab': typeof CollabRoute
+  '/export': typeof ExportRoute
+  '/home': typeof HomeRoute
+  '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
+  '/projects': typeof ProjectsRoute
+  '/register': typeof RegisterRoute
+  '/simulation-results': typeof SimulationResultsRoute
+  '/simulations': typeof SimulationsRoute
+  '/variants': typeof VariantsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-engine': typeof AiEngineRoute
+  '/annotation': typeof AnnotationRoute
+  '/ar': typeof ArRoute
+  '/collab': typeof CollabRoute
+  '/export': typeof ExportRoute
+  '/home': typeof HomeRoute
+  '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
+  '/projects': typeof ProjectsRoute
+  '/register': typeof RegisterRoute
+  '/simulation-results': typeof SimulationResultsRoute
+  '/simulations': typeof SimulationsRoute
+  '/variants': typeof VariantsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/ai-engine'
+    | '/annotation'
+    | '/ar'
+    | '/collab'
+    | '/export'
+    | '/home'
+    | '/login'
+    | '/notifications'
+    | '/profile'
+    | '/projects'
+    | '/register'
+    | '/simulation-results'
+    | '/simulations'
+    | '/variants'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/ai-engine'
+    | '/annotation'
+    | '/ar'
+    | '/collab'
+    | '/export'
+    | '/home'
+    | '/login'
+    | '/notifications'
+    | '/profile'
+    | '/projects'
+    | '/register'
+    | '/simulation-results'
+    | '/simulations'
+    | '/variants'
+  id:
+    | '__root__'
+    | '/'
+    | '/ai-engine'
+    | '/annotation'
+    | '/ar'
+    | '/collab'
+    | '/export'
+    | '/home'
+    | '/login'
+    | '/notifications'
+    | '/profile'
+    | '/projects'
+    | '/register'
+    | '/simulation-results'
+    | '/simulations'
+    | '/variants'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiEngineRoute: typeof AiEngineRoute
+  AnnotationRoute: typeof AnnotationRoute
+  ArRoute: typeof ArRoute
+  CollabRoute: typeof CollabRoute
+  ExportRoute: typeof ExportRoute
+  HomeRoute: typeof HomeRoute
+  LoginRoute: typeof LoginRoute
+  NotificationsRoute: typeof NotificationsRoute
+  ProfileRoute: typeof ProfileRoute
+  ProjectsRoute: typeof ProjectsRoute
+  RegisterRoute: typeof RegisterRoute
+  SimulationResultsRoute: typeof SimulationResultsRoute
+  SimulationsRoute: typeof SimulationsRoute
+  VariantsRoute: typeof VariantsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/variants': {
+      id: '/variants'
+      path: '/variants'
+      fullPath: '/variants'
+      preLoaderRoute: typeof VariantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulations': {
+      id: '/simulations'
+      path: '/simulations'
+      fullPath: '/simulations'
+      preLoaderRoute: typeof SimulationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulation-results': {
+      id: '/simulation-results'
+      path: '/simulation-results'
+      fullPath: '/simulation-results'
+      preLoaderRoute: typeof SimulationResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/export': {
+      id: '/export'
+      path: '/export'
+      fullPath: '/export'
+      preLoaderRoute: typeof ExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collab': {
+      id: '/collab'
+      path: '/collab'
+      fullPath: '/collab'
+      preLoaderRoute: typeof CollabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ar': {
+      id: '/ar'
+      path: '/ar'
+      fullPath: '/ar'
+      preLoaderRoute: typeof ArRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/annotation': {
+      id: '/annotation'
+      path: '/annotation'
+      fullPath: '/annotation'
+      preLoaderRoute: typeof AnnotationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-engine': {
+      id: '/ai-engine'
+      path: '/ai-engine'
+      fullPath: '/ai-engine'
+      preLoaderRoute: typeof AiEngineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +337,21 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiEngineRoute: AiEngineRoute,
+  AnnotationRoute: AnnotationRoute,
+  ArRoute: ArRoute,
+  CollabRoute: CollabRoute,
+  ExportRoute: ExportRoute,
+  HomeRoute: HomeRoute,
+  LoginRoute: LoginRoute,
+  NotificationsRoute: NotificationsRoute,
+  ProfileRoute: ProfileRoute,
+  ProjectsRoute: ProjectsRoute,
+  RegisterRoute: RegisterRoute,
+  SimulationResultsRoute: SimulationResultsRoute,
+  SimulationsRoute: SimulationsRoute,
+  VariantsRoute: VariantsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
