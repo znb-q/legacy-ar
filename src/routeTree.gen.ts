@@ -13,6 +13,7 @@ import { Route as VariantsRouteImport } from './routes/variants'
 import { Route as SimulationsRouteImport } from './routes/simulations'
 import { Route as SimulationResultsRouteImport } from './routes/simulation-results'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as CollabRouteImport } from './routes/collab'
@@ -39,6 +40,11 @@ const SimulationResultsRoute = SimulationResultsRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/collab': typeof CollabRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
+  '/projects': typeof ProjectsRoute
   '/register': typeof RegisterRoute
   '/simulation-results': typeof SimulationResultsRoute
   '/simulations': typeof SimulationsRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/collab': typeof CollabRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
+  '/projects': typeof ProjectsRoute
   '/register': typeof RegisterRoute
   '/simulation-results': typeof SimulationResultsRoute
   '/simulations': typeof SimulationsRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/collab': typeof CollabRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
+  '/projects': typeof ProjectsRoute
   '/register': typeof RegisterRoute
   '/simulation-results': typeof SimulationResultsRoute
   '/simulations': typeof SimulationsRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/collab'
     | '/home'
     | '/login'
+    | '/projects'
     | '/register'
     | '/simulation-results'
     | '/simulations'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/collab'
     | '/home'
     | '/login'
+    | '/projects'
     | '/register'
     | '/simulation-results'
     | '/simulations'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/collab'
     | '/home'
     | '/login'
+    | '/projects'
     | '/register'
     | '/simulation-results'
     | '/simulations'
@@ -167,6 +179,7 @@ export interface RootRouteChildren {
   CollabRoute: typeof CollabRoute
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
+  ProjectsRoute: typeof ProjectsRoute
   RegisterRoute: typeof RegisterRoute
   SimulationResultsRoute: typeof SimulationResultsRoute
   SimulationsRoute: typeof SimulationsRoute
@@ -201,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -263,6 +283,7 @@ const rootRouteChildren: RootRouteChildren = {
   CollabRoute: CollabRoute,
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
+  ProjectsRoute: ProjectsRoute,
   RegisterRoute: RegisterRoute,
   SimulationResultsRoute: SimulationResultsRoute,
   SimulationsRoute: SimulationsRoute,
