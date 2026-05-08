@@ -15,6 +15,7 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as CollabRouteImport } from './routes/collab'
 import { Route as ArRouteImport } from './routes/ar'
 import { Route as AnnotationRouteImport } from './routes/annotation'
+import { Route as AiEngineRouteImport } from './routes/ai-engine'
 import { Route as IndexRouteImport } from './routes/index'
 
 const RegisterRoute = RegisterRouteImport.update({
@@ -47,6 +48,11 @@ const AnnotationRoute = AnnotationRouteImport.update({
   path: '/annotation',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiEngineRoute = AiEngineRouteImport.update({
+  id: '/ai-engine',
+  path: '/ai-engine',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +61,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-engine': typeof AiEngineRoute
   '/annotation': typeof AnnotationRoute
   '/ar': typeof ArRoute
   '/collab': typeof CollabRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-engine': typeof AiEngineRoute
   '/annotation': typeof AnnotationRoute
   '/ar': typeof ArRoute
   '/collab': typeof CollabRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-engine': typeof AiEngineRoute
   '/annotation': typeof AnnotationRoute
   '/ar': typeof ArRoute
   '/collab': typeof CollabRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-engine'
     | '/annotation'
     | '/ar'
     | '/collab'
@@ -92,10 +102,19 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/annotation' | '/ar' | '/collab' | '/home' | '/login' | '/register'
+  to:
+    | '/'
+    | '/ai-engine'
+    | '/annotation'
+    | '/ar'
+    | '/collab'
+    | '/home'
+    | '/login'
+    | '/register'
   id:
     | '__root__'
     | '/'
+    | '/ai-engine'
     | '/annotation'
     | '/ar'
     | '/collab'
@@ -106,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiEngineRoute: typeof AiEngineRoute
   AnnotationRoute: typeof AnnotationRoute
   ArRoute: typeof ArRoute
   CollabRoute: typeof CollabRoute
@@ -158,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnnotationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-engine': {
+      id: '/ai-engine'
+      path: '/ai-engine'
+      fullPath: '/ai-engine'
+      preLoaderRoute: typeof AiEngineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -170,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiEngineRoute: AiEngineRoute,
   AnnotationRoute: AnnotationRoute,
   ArRoute: ArRoute,
   CollabRoute: CollabRoute,
