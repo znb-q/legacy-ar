@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Box, RotateCw, ZoomIn, ZoomOut, Move3d, Maximize, Hand, Layers, Camera, Ruler } from "lucide-react";
-import { MobileShell, ScreenHeader } from "@/components/MobileShell";
+import { Box, RotateCw, ZoomIn, ZoomOut, Move3d, Maximize, Hand, Layers, Camera, Ruler, Scan, ChevronUp } from "lucide-react";
+import { useState } from "react";
+import { MobileShell, ScreenHeader, FAB, BottomSheet } from "@/components/MobileShell";
 
 export const Route = createFileRoute("/ar")({
   head: () => ({ meta: [{ title: "AR Viewer — Legacy AR" }] }),
@@ -8,6 +9,7 @@ export const Route = createFileRoute("/ar")({
 });
 
 function AR() {
+  const [sheet, setSheet] = useState(false);
   return (
     <MobileShell>
       <ScreenHeader title="AR Viewer" subtitle="Aether Drone X1 · Live"
@@ -77,6 +79,31 @@ function AR() {
           </div>
         ))}
       </div>
+
+      <FAB icon={Scan} label="Scan" onClick={() => setSheet(true)} />
+
+      <BottomSheet open={sheet} onClose={() => setSheet(false)} title="Scene Analytics" peek={56}>
+        <div className="grid grid-cols-3 gap-3">
+          {[{ l: "Verts", v: "92.1k" }, { l: "Mat", v: "12" }, { l: "Lights", v: "4" }, { l: "Anchors", v: "6" }, { l: "FPS", v: "60" }, { l: "Mem", v: "184MB" }].map((s) => (
+            <div key={s.l} className="glass rounded-xl p-3 text-center">
+              <p className="text-[10px] text-muted-foreground">{s.l}</p>
+              <p className="mt-1 text-sm font-bold text-gradient">{s.v}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-[10px] uppercase tracking-widest text-accent">Layers</p>
+        <div className="mt-2 space-y-2">
+          {["Frame", "Rotors", "Sensors", "Skin"].map((l) => (
+            <div key={l} className="glass flex items-center justify-between rounded-xl px-3 py-2">
+              <span className="text-xs">{l}</span>
+              <span className="h-2 w-2 rounded-full bg-accent glow-cyan" />
+            </div>
+          ))}
+        </div>
+        <button className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3 text-xs font-semibold text-white glow-primary">
+          <ChevronUp className="h-4 w-4" /> Expand Full Report
+        </button>
+      </BottomSheet>
     </MobileShell>
   );
 }
