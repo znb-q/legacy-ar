@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as CollabRouteImport } from './routes/collab'
 import { Route as IndexRouteImport } from './routes/index'
 
 const RegisterRoute = RegisterRouteImport.update({
@@ -29,6 +30,11 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CollabRoute = CollabRouteImport.update({
+  id: '/collab',
+  path: '/collab',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/collab': typeof CollabRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/collab': typeof CollabRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/collab': typeof CollabRoute
   '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/login' | '/register'
+  fullPaths: '/' | '/collab' | '/home' | '/login' | '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home' | '/login' | '/register'
-  id: '__root__' | '/' | '/home' | '/login' | '/register'
+  to: '/' | '/collab' | '/home' | '/login' | '/register'
+  id: '__root__' | '/' | '/collab' | '/home' | '/login' | '/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CollabRoute: typeof CollabRoute
   HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/collab': {
+      id: '/collab'
+      path: '/collab'
+      fullPath: '/collab'
+      preLoaderRoute: typeof CollabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CollabRoute: CollabRoute,
   HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
