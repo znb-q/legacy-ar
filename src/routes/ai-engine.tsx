@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Cpu, Sparkles, Wand2, Sliders, Zap } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Cpu, Sparkles, Wand2, Sliders, Zap, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { MobileShell, ScreenHeader } from "@/components/MobileShell";
 
 export const Route = createFileRoute("/ai-engine")({
@@ -8,6 +9,31 @@ export const Route = createFileRoute("/ai-engine")({
 });
 
 function AIEngine() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [goals, setGoals] = useState<Record<string, boolean>>({
+    Performance: true, Efficiency: true, Aesthetics: false, Innovation: true,
+  });
+
+  const handleGenerate = async () => {
+    setLoading(true);
+    const enabled = Object.entries(goals).filter(([, v]) => v).map(([k]) => k);
+    // Simulated generation
+    await new Promise((r) => setTimeout(r, 1400));
+    const variants = Array.from({ length: 4 }).map((_, i) => ({
+      n: `V${i + 1} · ${["Lightframe", "TitanCore", "AeroFlex", "Hybrid Mesh"][i]}`,
+      w: `${(1.8 + Math.random() * 0.9).toFixed(1)} kg`,
+      s: Math.round(85 + Math.random() * 13),
+      c: `$ ${Math.round(280 + Math.random() * 150)}`,
+      r: +(4.2 + Math.random() * 0.7).toFixed(1),
+      sel: i === 1,
+      goals: enabled,
+    }));
+    try { localStorage.setItem("legacy.variants", JSON.stringify({ created: Date.now(), variants })); } catch {}
+    setLoading(false);
+    navigate({ to: "/variants" });
+  };
+
   return (
     <MobileShell>
       <ScreenHeader title="AI Design Engine" subtitle="Generative optimization" />
@@ -57,8 +83,10 @@ function AIEngine() {
           { i: Sliders, l: "Efficiency", on: true },
           { i: Wand2, l: "Aesthetics", on: false },
           { i: Sparkles, l: "Innovation", on: true },
-        ].map(({ i: Icon, l, on }) => (
-          <button key={l} className={`glass flex items-center justify-between rounded-2xl p-4 ${on ? "border-glow" : ""}`}>
+        ].map(({ i: Icon, l }) => {
+          const on = goals[l];
+          return (
+          <button type="button" onClick={() => setGoals((g) => ({ ...g, [l]: !g[l] }))} key={l} className={`glass flex items-center justify-between rounded-2xl p-4 ${on ? "border-glow" : ""}`}>
             <div className="flex items-center gap-2">
               <Icon className={`h-4 w-4 ${on ? "text-accent" : "text-muted-foreground"}`} />
               <span className="text-xs">{l}</span>
@@ -67,14 +95,16 @@ function AIEngine() {
               <span className={`absolute top-0.5 h-3 w-3 rounded-full bg-white transition-all ${on ? "left-3.5" : "left-0.5"}`} />
             </span>
           </button>
-        ))}
+          );
+        })}
       </div>
 
-      <Link to="/variants" className="mt-6 block">
-        <button className="relative w-full overflow-hidden rounded-2xl bg-gradient-primary py-4 text-sm font-bold text-white glow-primary active:scale-[0.98]">
-          <span className="relative flex items-center justify-center gap-2"><Sparkles className="h-4 w-4" /> Generate Variants</span>
-        </button>
-      </Link>
+      <button onClick={handleGenerate} disabled={loading} className="mt-6 relative w-full overflow-hidden rounded-2xl bg-gradient-primary py-4 text-sm font-bold text-white glow-primary active:scale-[0.98] disabled:opacity-70">
+        <span className="relative flex items-center justify-center gap-2">
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+          {loading ? "Generating variants…" : "Generate Variants"}
+        </span>
+      </button>
     </MobileShell>
   );
 }
