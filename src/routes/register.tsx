@@ -22,7 +22,7 @@ function Register() {
   const handleGoogle = async () => {
     setError(null);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/projects`,
+      redirect_uri: `${window.location.origin}/home`,
     });
     if (result.error) setError(result.error.message ?? "Google sign-in failed");
   };
@@ -31,14 +31,15 @@ function Register() {
     e.preventDefault();
     setError(null);
     if (password !== confirm) { setError("Passwords do not match"); return; }
+    if (password.length < 6) { setError("Password must be at least 6 characters"); return; }
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email, password,
-      options: { data: { full_name: name }, emailRedirectTo: `${window.location.origin}/projects` },
+      options: { data: { full_name: name }, emailRedirectTo: `${window.location.origin}/home` },
     });
     setLoading(false);
     if (error) { setError(error.message); return; }
-    navigate({ to: "/projects" });
+    navigate({ to: "/home" });
   };
 
   return (
