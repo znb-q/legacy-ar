@@ -3,6 +3,7 @@ import { Mail, Lock, Eye, Fingerprint, Loader2 } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — Legacy AR" }] }),
@@ -15,6 +16,14 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleGoogle = async () => {
+    setError(null);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: `${window.location.origin}/projects`,
+    });
+    if (result.error) setError(result.error.message ?? "Google sign-in failed");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +52,17 @@ function Login() {
         <button type="submit" disabled={loading} className="relative w-full overflow-hidden rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-white glow-primary transition-transform active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2">
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}
           {loading ? "Signing in…" : "Sign In"}
+        </button>
+
+        <div className="flex items-center gap-3 pt-1">
+          <div className="h-px flex-1 bg-[oklch(0.5_0.1_280/0.3)]" />
+          <span className="text-[10px] uppercase tracking-widest text-muted-foreground">or</span>
+          <div className="h-px flex-1 bg-[oklch(0.5_0.1_280/0.3)]" />
+        </div>
+
+        <button type="button" onClick={handleGoogle} className="flex w-full items-center justify-center gap-3 rounded-2xl border border-[oklch(0.5_0.1_280/0.3)] bg-[oklch(0.18_0.05_280/0.5)] py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-[oklch(0.22_0.06_280/0.6)] active:scale-[0.98]">
+          <GoogleIcon />
+          Continue with Google
         </button>
       </form>
 
