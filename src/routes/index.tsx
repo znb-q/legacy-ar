@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Hexagon } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [{ title: "Legacy AR — Collaborative Prototyping" }] }),
@@ -10,8 +11,17 @@ export const Route = createFileRoute("/")({
 function Splash() {
   const nav = useNavigate();
   useEffect(() => {
-    const t = setTimeout(() => nav({ to: "/login" }), 2600);
-    return () => clearTimeout(t);
+    let cancelled = false;
+    const t = setTimeout(async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (cancelled) return;
+        nav({ to: data.session ? "/home" : "/login" });
+      } catch {
+        if (!cancelled) nav({ to: "/login" });
+      }
+    }, 2200);
+    return () => { cancelled = true; clearTimeout(t); };
   }, [nav]);
   return (
     <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center overflow-hidden px-6">
