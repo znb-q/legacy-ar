@@ -20,7 +20,7 @@ function Login() {
   const handleGoogle = async () => {
     setError(null);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/projects`,
+      redirect_uri: `${window.location.origin}/home`,
     });
     if (result.error) setError(result.error.message ?? "Google sign-in failed");
   };
@@ -32,7 +32,7 @@ function Login() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) { setError(error.message); return; }
-    navigate({ to: "/projects" });
+    navigate({ to: "/home" });
   };
 
   return (
