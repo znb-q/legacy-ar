@@ -1,6 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Mail, Lock, Eye, Fingerprint, Github, Chrome, Apple } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Mail, Lock, Eye, Fingerprint, Loader2 } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — Legacy AR" }] }),
@@ -8,6 +10,22 @@ export const Route = createFileRoute("/login")({
 });
 
 function Login() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) { setError(error.message); return; }
+    navigate({ to: "/projects" });
+  };
+
   return (
     <MobileShell hideNav>
       <div className="flex flex-col items-center pt-8">
@@ -18,35 +36,15 @@ function Login() {
         <p className="mt-2 text-sm text-muted-foreground">Sign in to continue prototyping</p>
       </div>
 
-      <div className="glass mt-10 space-y-5 rounded-3xl p-6">
-        <Field icon={Mail} label="Email" placeholder="you@legacy.ar" type="email" />
-        <Field icon={Lock} label="Password" placeholder="••••••••" type="password" trailing={<Eye className="h-4 w-4 text-muted-foreground" />} />
-        <div className="flex items-center justify-between text-xs">
-          <label className="flex items-center gap-2 text-muted-foreground">
-            <span className="relative inline-flex h-4 w-4 items-center justify-center rounded border border-glow">
-              <span className="h-2 w-2 rounded-sm bg-gradient-primary" />
-            </span>
-            Remember me
-          </label>
-          <a className="text-accent hover:underline">Forgot password?</a>
-        </div>
-        <Link to="/home" className="block">
-          <button className="relative w-full overflow-hidden rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-white glow-primary transition-transform active:scale-[0.98]">
-            Sign In
-          </button>
-        </Link>
-
-        <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-muted-foreground">
-          <div className="h-px flex-1 bg-border" /> or continue with <div className="h-px flex-1 bg-border" />
-        </div>
-        <div className="grid grid-cols-3 gap-3">
-          {[Chrome, Apple, Github].map((I, i) => (
-            <button key={i} className="glass flex h-12 items-center justify-center rounded-xl hover:border-glow">
-              <I className="h-5 w-5 text-accent" />
-            </button>
-          ))}
-        </div>
-      </div>
+      <form onSubmit={handleSubmit} className="glass mt-10 space-y-5 rounded-3xl p-6">
+        <Field icon={Mail} label="Email" placeholder="you@legacy.ar" type="email" value={email} onChange={setEmail} />
+        <Field icon={Lock} label="Password" placeholder="••••••••" type="password" value={password} onChange={setPassword} trailing={<Eye className="h-4 w-4 text-muted-foreground" />} />
+        {error && <p className="text-xs text-destructive">{error}</p>}
+        <button type="submit" disabled={loading} className="relative w-full overflow-hidden rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-white glow-primary transition-transform active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2">
+          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+          {loading ? "Signing in…" : "Sign In"}
+        </button>
+      </form>
 
       <p className="mt-6 text-center text-xs text-muted-foreground">
         New here? <Link to="/register" className="text-accent">Create account</Link>
@@ -55,13 +53,13 @@ function Login() {
   );
 }
 
-function Field({ icon: Icon, label, placeholder, type, trailing }: any) {
+function Field({ icon: Icon, label, placeholder, type, trailing, value, onChange }: any) {
   return (
     <div>
       <label className="mb-1.5 block text-[10px] uppercase tracking-widest text-muted-foreground">{label}</label>
       <div className="flex items-center gap-3 rounded-xl border border-[oklch(0.5_0.1_280/0.3)] bg-[oklch(0.18_0.05_280/0.5)] px-3 py-3 focus-within:border-glow">
         <Icon className="h-4 w-4 text-accent" />
-        <input type={type} placeholder={placeholder} className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/60 outline-none" />
+        <input type={type} placeholder={placeholder} value={value ?? ""} onChange={(e) => onChange?.(e.target.value)} className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/60 outline-none" />
         {trailing}
       </div>
     </div>
