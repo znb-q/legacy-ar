@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Box, MessageCircle, Highlighter, Plus, Tag, Send } from "lucide-react";
+import { useState } from "react";
 import { MobileShell, ScreenHeader } from "@/components/MobileShell";
 
 export const Route = createFileRoute("/annotation")({
@@ -8,11 +9,28 @@ export const Route = createFileRoute("/annotation")({
 });
 
 function Annotation() {
-  const pins = [
+  const [pins, setPins] = useState([
     { x: 30, y: 30, n: 1, label: "Joint stress" },
     { x: 70, y: 45, n: 2, label: "Heat zone" },
     { x: 45, y: 70, n: 3, label: "Weld" },
-  ];
+  ]);
+  const [comments, setComments] = useState<{ pin: number; text: string; at: string }[]>([]);
+  const [draft, setDraft] = useState("");
+  const [activePin, setActivePin] = useState(3);
+
+  const addPin = () => {
+    const next = pins.length + 1;
+    setPins([...pins, { x: 20 + Math.random() * 60, y: 20 + Math.random() * 60, n: next, label: `New annotation ${next}` }]);
+    setActivePin(next);
+  };
+
+  const submitComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!draft.trim()) return;
+    setComments([...comments, { pin: activePin, text: draft.trim(), at: new Date().toLocaleTimeString() }]);
+    setDraft("");
+  };
+
   return (
     <MobileShell>
       <ScreenHeader title="Annotations" subtitle="Tap on model to add pins" />
@@ -23,15 +41,20 @@ function Annotation() {
           <Box className="h-44 w-44 text-accent/70 animate-float" strokeWidth={0.8} />
         </div>
         {pins.map((p) => (
-          <button key={p.n} className="absolute" style={{ left: `${p.x}%`, top: `${p.y}%` }}>
+          <button key={p.n} onClick={() => setActivePin(p.n)} className="absolute" style={{ left: `${p.x}%`, top: `${p.y}%` }}>
             <span className="absolute inset-0 -m-2 animate-ping rounded-full bg-accent/40" />
-            <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-gradient-primary text-[11px] font-bold text-white glow-primary">{p.n}</span>
+            <span className={`relative flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold text-white ${activePin === p.n ? "bg-gradient-primary glow-primary ring-2 ring-accent" : "bg-gradient-primary/70"}`}>{p.n}</span>
           </button>
         ))}
 
         <div className="absolute right-3 top-3 flex flex-col gap-2">
-          {[Plus, Highlighter, Tag, MessageCircle].map((I, i) => (
-            <button key={i} className="glass-strong flex h-10 w-10 items-center justify-center rounded-full"><I className="h-4 w-4 text-accent" /></button>
+          {[
+            { I: Plus, onClick: addPin },
+            { I: Highlighter, onClick: () => {} },
+            { I: Tag, onClick: () => {} },
+            { I: MessageCircle, onClick: () => {} },
+          ].map(({ I, onClick }, i) => (
+            <button key={i} onClick={onClick} className="glass-strong flex h-10 w-10 items-center justify-center rounded-full active:scale-95"><I className="h-4 w-4 text-accent" /></button>
           ))}
         </div>
       </div>
@@ -53,10 +76,20 @@ function Annotation() {
         ))}
       </div>
 
-      <div className="glass mt-5 flex items-center gap-2 rounded-2xl p-2">
-        <input placeholder="Add comment to pin #3..." className="flex-1 bg-transparent px-3 py-2 text-xs outline-none placeholder:text-muted-foreground/60" />
-        <button className="rounded-xl bg-gradient-primary p-2 glow-primary"><Send className="h-4 w-4 text-white" /></button>
-      </div>
+      {comments.length > 0 && (
+        <div className="mt-4 space-y-2">
+          {comments.map((c, i) => (
+            <div key={i} className="glass rounded-xl p-3 text-xs">
+              <p className="text-[10px] text-accent">Pin #{c.pin} · {c.at}</p>
+              <p className="mt-1">{c.text}</p>
+            </div>
+          ))}
+        </div>
+      )}
+      <form onSubmit={submitComment} className="glass mt-5 flex items-center gap-2 rounded-2xl p-2">
+        <input value={draft} onChange={(e) => setDraft(e.target.value)} placeholder={`Add comment to pin #${activePin}...`} className="flex-1 bg-transparent px-3 py-2 text-xs outline-none placeholder:text-muted-foreground/60" />
+        <button type="submit" disabled={!draft.trim()} className="rounded-xl bg-gradient-primary p-2 glow-primary disabled:opacity-50"><Send className="h-4 w-4 text-white" /></button>
+      </form>
     </MobileShell>
   );
 }

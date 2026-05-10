@@ -39,10 +39,11 @@ export function BottomSheet({ open, onClose, title, children, peek = 120 }: { op
     <>
       {open && <div onClick={onClose} className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm animate-fade-in" />}
       <div
-        className="fixed bottom-0 left-1/2 z-50 w-full max-w-md -translate-x-1/2 transition-transform duration-300 ease-out"
+        className="fixed bottom-20 left-1/2 z-30 w-full max-w-md -translate-x-1/2 transition-transform duration-300 ease-out"
         style={{ transform: open ? `translate(-50%, ${Math.max(0, drag)}px)` : `translate(-50%, calc(100% - ${peek}px))` }}
+        onClick={() => { if (!open) {/* allow tap to open via parent */} }}
       >
-        <div className="glass-strong rounded-t-3xl px-5 pt-3 pb-8 max-h-[85vh] overflow-y-auto"
+        <div className={`glass-strong rounded-t-3xl px-5 pt-3 pb-8 overflow-y-auto ${open ? "max-h-[75vh]" : ""}`}
           onTouchStart={(e) => (startY.current = e.touches[0].clientY)}
           onTouchMove={(e) => startY.current != null && setDrag(e.touches[0].clientY - startY.current)}
           onTouchEnd={() => { if (drag > 80) onClose(); setDrag(0); startY.current = null; }}

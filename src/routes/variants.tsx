@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Box, Star, GitCompare, Check } from "lucide-react";
+import { useEffect, useState } from "react";
 import { MobileShell, ScreenHeader } from "@/components/MobileShell";
 
 export const Route = createFileRoute("/variants")({
@@ -7,7 +8,7 @@ export const Route = createFileRoute("/variants")({
   component: Variants,
 });
 
-const data = [
+const fallback = [
   { n: "V1 · Lightframe", w: "1.9 kg", s: 92, c: "$ 280", r: 4.6, sel: false },
   { n: "V2 · TitanCore", w: "2.6 kg", s: 98, c: "$ 410", r: 4.4, sel: true },
   { n: "V3 · AeroFlex", w: "2.1 kg", s: 88, c: "$ 320", r: 4.8, sel: false },
@@ -15,6 +16,16 @@ const data = [
 ];
 
 function Variants() {
+  const [data, setData] = useState(fallback);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("legacy.variants");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed?.variants?.length) setData(parsed.variants);
+      }
+    } catch {}
+  }, []);
   return (
     <MobileShell>
       <ScreenHeader title="Design Variants" subtitle="4 generated · ranked by score"
